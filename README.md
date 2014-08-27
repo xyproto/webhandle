@@ -3,6 +3,8 @@ webhandle
 
 Serve webpages with instapage, web.go and browserspeak.
 
+Deprecated package! I'm planning to use negroni middleware instead.
+
 Example:
 
 ``` go
