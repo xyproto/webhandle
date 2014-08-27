@@ -1,11 +1,3 @@
-webhandle
-=========
-
-Serve webpages with instapage and browserspeak.
-
-Example:
-
-~~~ go
 package main
 
 import (
@@ -49,4 +41,3 @@ func main() {
 
 	web.Run(":9080")
 }
-~~~
