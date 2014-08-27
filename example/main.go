@@ -33,7 +33,7 @@ func main() {
 	webhandle.PublishPage("/", "/main.css", browserspeak.SamplePage)
 
 	web.Get("/error", errorlog)
-	web.Get("/hello", hello)
+	web.Get("/hello/(.*)", hello)
 
 	web.Get("/svg", exampleSVG)
 

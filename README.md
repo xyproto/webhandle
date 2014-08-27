@@ -1,11 +1,11 @@
 webhandle
 =========
 
-Serve webpages with instapage and browserspeak.
+Serve webpages with instapage, web.go and browserspeak.
 
 Example:
 
-~~~ go
+``` go
 package main
 
 import (
@@ -41,7 +41,7 @@ func main() {
 	webhandle.PublishPage("/", "/main.css", browserspeak.SamplePage)
 
 	web.Get("/error", errorlog)
-	web.Get("/hello", hello)
+	web.Get("/hello/(.*)", hello)
 
 	web.Get("/svg", exampleSVG)
 
@@ -49,4 +49,4 @@ func main() {
 
 	web.Run(":9080")
 }
-~~~
+```
