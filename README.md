@@ -1,7 +1,7 @@
 webhandle
 =========
 
-Serve webpages with instapage, web.go and browserspeak.
+Serve webpages with instapage, web.go and onthefly.
 
 Deprecated package! I'm planning to use negroni middleware instead.
 
@@ -14,7 +14,7 @@ import (
 	"io/ioutil"
 
 	"github.com/hoisie/web"
-	"github.com/xyproto/browserspeak"
+	"github.com/xyproto/onthefly"
 	"github.com/xyproto/instapage"
 	"github.com/xyproto/webhandle"
 )
@@ -36,11 +36,11 @@ func hello(val string) string {
 }
 
 func exampleSVG() string {
-	return browserspeak.SampleSVG2().String()
+	return onthefly.SampleSVG2().String()
 }
 
 func main() {
-	webhandle.PublishPage("/", "/main.css", browserspeak.SamplePage)
+	webhandle.PublishPage("/", "/main.css", onthefly.SamplePage)
 
 	web.Get("/error", errorlog)
 	web.Get("/hello/(.*)", hello)

@@ -8,7 +8,7 @@ import (
 
 	"github.com/drbawb/mustache"
 	"github.com/hoisie/web"
-	. "github.com/xyproto/browserspeak"
+	. "github.com/xyproto/onthefly"
 	"github.com/xyproto/instapage"
 )
 
