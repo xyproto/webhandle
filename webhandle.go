@@ -8,8 +8,8 @@ import (
 
 	"github.com/drbawb/mustache"
 	"github.com/hoisie/web"
-	. "github.com/xyproto/onthefly"
 	"github.com/xyproto/instapage"
+	. "github.com/xyproto/onthefly"
 )
 
 type (
