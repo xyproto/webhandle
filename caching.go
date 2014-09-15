@@ -28,7 +28,7 @@ func (f FakeResponseWriter) String() string {
 // Wrap a http.HandlerFunc so that the output is cached (with an id)
 // Do not cache functions with side-effects! (that sets the mimetype for instance)
 // The safest thing for now is to only cache images.
-func CacheWrapper(id string, handler http.HandlerFunc) http.HandlerFunc {
+func NewCacheWrapper(id string, handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if _, ok := globalStringCache[id]; !ok {
 			fake := &FakeResponseWriter{}
