@@ -2,124 +2,115 @@ package webhandle
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
+	"mime"
+	"net/http"
 	"path/filepath"
 	"strings"
 
 	"github.com/drbawb/mustache"
-	"github.com/hoisie/web"
 	"github.com/xyproto/instapage"
-	. "github.com/xyproto/onthefly"
+	"github.com/xyproto/onthefly"
 )
 
 type (
-	// Various functiomn signatures for handling requests
-	WebHandle              (func(ctx *web.Context, val string) string)
-	SimpleContextHandle    (func(ctx *web.Context) string)
-	TemplateValueGenerator func(*web.Context) TemplateValues
+	TemplateValueGenerator func(w http.ResponseWriter, req *http.Request) onthefly.TemplateValues
 )
+
+// type http.HandlerFunc er heller en struct som implementerer http.Handler interfacet (har en ServeHTTP func)
 
 // Caching
 var globalStringCache map[string]string
 
 // Create a web.go compatible function that returns a string that is the HTML for this page
-func GenerateHTML(page *Page) func(*web.Context) string {
-	return func(ctx *web.Context) string {
-		return page.GetXML(true)
+func GenerateHTML(page *onthefly.Page) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Add("Content-Type", "text/html")
+		fmt.Fprint(w, page.GetXML(true))
 	}
 }
 
 // Create a web.go compatible function that returns a string that is the HTML for this page
-func GenerateHTMLwithTemplate(page *Page, tvg TemplateValueGenerator) func(*web.Context) string {
-	return func(ctx *web.Context) string {
-		values := tvg(ctx)
-		return mustache.Render(page.GetXML(true), values)
+func GenerateHTMLwithTemplate(page *onthefly.Page, tvg TemplateValueGenerator) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Add("Content-Type", "text/html")
+		values := tvg(w, req)
+		fmt.Fprint(w, mustache.Render(page.GetXML(true), values))
 	}
 }
 
 // Create a web.go compatible function that returns a string that is the CSS for this page
-func GenerateCSS(page *Page) func(*web.Context) string {
-	return func(ctx *web.Context) string {
-		ctx.ContentType("css")
-		return page.GetCSS()
+func GenerateCSS(page *onthefly.Page) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Add("Content-Type", "text/css")
+		fmt.Fprint(w, page.GetCSS())
 	}
 }
 
 // Create a web.go compatible function that returns a string that is the XML for this page
-func GenerateXML(page *Page) func(*web.Context) string {
-	return func(ctx *web.Context) string {
-		ctx.ContentType("xml")
-		return page.GetXML(false)
+func GenerateXML(page *onthefly.Page) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Add("Content-Type", "text/xml")
+		//w.Header().Add("Content-Type", "application/xml") // for human unreadable content
+		fmt.Fprint(w, page.GetXML(false))
 	}
 }
 
 // Creates a page based on the contents of "error.log". Useful for showing compile errors while creating an application.
-func GenerateErrorHandle(errorfilename string) SimpleContextHandle {
-	return func(ctx *web.Context) string {
+func GenerateErrorHandler(errorfilename string) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
 		data, err := ioutil.ReadFile(errorfilename)
 		if err != nil {
-			return instapage.Message("Good", "No errors")
+			fmt.Fprint(w, instapage.Message("Good", "No errors"))
+			return
 		}
 		errors := strings.Replace(string(data), "\n", "</br>", -1)
-		return instapage.Message("Errors", errors)
+		fmt.Fprint(w, instapage.Message("Errors", errors))
 	}
 }
 
-// Handles pages that are not found
-func NotFound(ctx *web.Context, val string) string {
-	ctx.NotFound(instapage.Message("No", "Page not found"))
-	return ""
-}
-
 // Takes a filename and returns a function that can handle the request
-func File(filename string) func(ctx *web.Context) string {
+func File(filename string) func(w http.ResponseWriter, req *http.Request) {
 	var extension string
 	if strings.Contains(filename, ".") {
 		extension = filepath.Ext(filename)
 	}
-	return func(ctx *web.Context) string {
+	return func(w http.ResponseWriter, req *http.Request) {
 		if extension != "" {
-			ctx.ContentType(extension)
+			// TODO: Check if TypeByExtension returned something sensible
+			w.Header().Add("Content-Type", mime.TypeByExtension(extension))
 		}
-		imagebytes, _ := ioutil.ReadFile(filename)
-		buf := bytes.NewBuffer(imagebytes)
-		return buf.String()
+		// TODO: Don't ignore errors
+		filebytes, _ := ioutil.ReadFile(filename)
+		buf := bytes.NewBuffer(filebytes)
+		fmt.Fprint(w, buf.String())
 	}
 }
 
 // Takes an url and a filename and offers that file at the given url
-func PublishFile(url, filename string) {
-	web.Get(url, File(filename))
+func PublishFile(mux *http.ServeMux, url, filename string) {
+	mux.HandleFunc(url, File(filename))
 }
 
 // Takes a filename and offers that file at the root url
-func PublishRootFile(filename string) {
-	web.Get("/"+filename, File(filename))
+func PublishRootFile(mux *http.ServeMux, filename string) {
+	mux.HandleFunc("/"+filename, File(filename))
 }
 
 // Expose the HTML and CSS generated by a page building function to the two given urls
-func PublishPage(htmlurl, cssurl string, buildfunction func(string) *Page) {
+func PublishPage(mux *http.ServeMux, htmlurl, cssurl string, buildfunction func(string) *onthefly.Page) {
 	page := buildfunction(cssurl)
-	web.Get(htmlurl, GenerateHTML(page))
-	web.Get(cssurl, GenerateCSS(page))
+	mux.HandleFunc(htmlurl, GenerateHTML(page))
+	mux.HandleFunc(cssurl, GenerateCSS(page))
 }
 
-// Wrap a SimpleContextHandle so that the output is cached (with an id)
-// Do not cache functions with side-effects! (that sets the mimetype for instance)
-// The safest thing for now is to only cache images.
-func CacheWrapper(id string, f SimpleContextHandle) SimpleContextHandle {
-	return func(ctx *web.Context) string {
-		if _, ok := globalStringCache[id]; !ok {
-			globalStringCache[id] = f(ctx)
-		}
-		return globalStringCache[id]
-	}
-}
-
-func Publish(url, filename string, cache bool) {
+func Publish(mux *http.ServeMux, url, filename string, cache bool) {
 	if cache {
-		web.Get(url, CacheWrapper(url, File(filename)))
+		mux.HandleFunc(url, CacheWrapper(url, File(filename)))
 	} else {
-		web.Get(url, File(filename))
+		mux.HandleFunc(url, File(filename))
 	}
 }
+
+// For a NotFound handler, look at net/http

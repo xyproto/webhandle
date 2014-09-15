@@ -2,7 +2,9 @@ package webhandle
 
 import (
 	"errors"
+	"html"
 	"math/rand"
+	"net/url"
 	"strings"
 )
 
@@ -10,14 +12,25 @@ const (
 	USERNAME_ALLOWED_LETTERS = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ_0123456789"
 )
 
+// Get a value from an url.
+// /hi/there/asdf with pos 2 returns asdf
+func GetVal(url *url.URL, pos int) string {
+	p := html.EscapeString(url.Path)
+	fields := strings.Split(p, "/")
+	if len(fields) <= pos {
+		return ""
+	}
+	return fields[pos]
+}
+
 // Converts "true" or "false" to a bool
 func TruthValue(val string) bool {
 	return "true" == val
 }
 
-// Split a string at the colon into two strings
+// Split a string into two strings at the colon
 // If there's no colon, return the string and an empty string
-func ColonSplit(s string) (string, string) {
+func HostPortSplit(s string) (string, string) {
 	if strings.Contains(s, ":") {
 		sl := strings.SplitN(s, ":", 2)
 		return sl[0], sl[1]
