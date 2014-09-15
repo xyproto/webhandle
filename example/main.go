@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 
 	"github.com/hoisie/web"
-	"github.com/xyproto/onthefly"
 	"github.com/xyproto/instapage"
+	"github.com/xyproto/onthefly"
 	"github.com/xyproto/webhandle"
 )
 
@@ -30,7 +30,7 @@ func exampleSVG() string {
 }
 
 func main() {
-	webhandle.PublishPage("/", "/main.css", onthefly.SamplePage)
+	webhandle.OldPublishPage("/", "/main.css", onthefly.SamplePage)
 
 	web.Get("/error", errorlog)
 	web.Get("/hello/(.*)", hello)
