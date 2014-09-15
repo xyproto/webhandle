@@ -2,8 +2,10 @@ package webhandle
 
 import (
 	"errors"
+	"fmt"
 	"html"
 	"math/rand"
+	"net/http"
 	"net/url"
 	"strings"
 )
@@ -11,6 +13,26 @@ import (
 const (
 	USERNAME_ALLOWED_LETTERS = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ_0123456789"
 )
+
+// Returns a form parameter, or an empty string
+func GetFormParam(req *http.Request, key string) string {
+	return req.PostFormValue(key)
+}
+
+// Returns an url parameter, or an empty string
+func GetParam(req *http.Request, key string) string {
+	values, err := url.ParseQuery(req.URL.RawQuery)
+	if err != nil {
+		return ""
+	}
+	val := values.Get(key)
+	return val
+}
+
+// Write the given string to the response writer. Convenience function.
+func Ret(w http.ResponseWriter, s string) {
+	fmt.Fprint(w, s)
+}
 
 // Get a value from an url.
 // /hi/there/asdf with pos 2 returns asdf
@@ -21,6 +43,17 @@ func GetVal(url *url.URL, pos int) string {
 		return ""
 	}
 	return fields[pos]
+}
+
+// Get the last value from an url.
+// /hi/there/qwerty returns qwerty
+func GetLast(url *url.URL) string {
+	p := html.EscapeString(url.Path)
+	fields := strings.Split(p, "/")
+	if len(fields) == 0 {
+		return ""
+	}
+	return fields[len(fields)-1]
 }
 
 // Converts "true" or "false" to a bool
