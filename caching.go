@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+var globalStringCache map[string]string
+
 type FakeResponseWriter struct {
 	buf bytes.Buffer
 }
