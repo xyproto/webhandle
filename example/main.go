@@ -30,7 +30,7 @@ func exampleSVG() string {
 }
 
 func main() {
-	webhandle.OldPublishPage("/", "/main.css", onthefly.SamplePage)
+	webhandle.PublishPage("/", "/main.css", onthefly.SamplePage)
 
 	web.Get("/error", errorlog)
 	web.Get("/hello/(.*)", hello)
