@@ -1,17 +1,11 @@
 package webhandle
 
 import (
-	"errors"
 	"fmt"
 	"html"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"strings"
-)
-
-const (
-	USERNAME_ALLOWED_LETTERS = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ_0123456789"
 )
 
 // Returns a form parameter, or an empty string
@@ -78,55 +72,7 @@ func TableCell(b bool) string {
 	return "<td class=\"no\">no</td>"
 }
 
-func RandomString(length int) string {
-	b := make([]byte, length)
-	for i := 0; i < length; i++ {
-		b[i] = byte(rand.Int63() & 0xff)
-	}
-	return string(b)
-}
-
-func RandomHumanFriendlyString(length int) string {
-	const (
-		vowels     = "aeiouy" // email+browsers didn't like "æøå" too much
-		consonants = "bcdfghjklmnpqrstvwxz"
-	)
-	b := make([]byte, length)
-	for i := 0; i < length; i++ {
-		if i%2 == 0 {
-			b[i] = vowels[rand.Intn(len(vowels))]
-		} else {
-			b[i] = consonants[rand.Intn(len(consonants))]
-		}
-	}
-	return string(b)
-}
-
-func RandomCookieFriendlyString(length int) string {
-	const ALLOWED = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	b := make([]byte, length)
-	for i := 0; i < length; i++ {
-		b[i] = ALLOWED[rand.Intn(len(ALLOWED))]
-	}
-	return string(b)
-}
-
 func CleanUserInput(val string) string {
 	return strings.Replace(val, "<", "&lt;", -1)
 }
 
-func Check(username, password string) error {
-NEXT:
-	for _, letter := range username {
-		for _, allowedLetter := range USERNAME_ALLOWED_LETTERS {
-			if letter == allowedLetter {
-				continue NEXT
-			}
-		}
-		return errors.New("Only a-å, A-Å, 0-9 and _ are allowed in usernames.")
-	}
-	if username == password {
-		return errors.New("Username and password must be different, try another password.")
-	}
-	return nil
-}
