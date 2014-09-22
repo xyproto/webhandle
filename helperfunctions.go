@@ -75,4 +75,3 @@ func TableCell(b bool) string {
 func CleanUserInput(val string) string {
 	return strings.Replace(val, "<", "&lt;", -1)
 }
-

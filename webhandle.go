@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/drbawb/mustache"
 	"github.com/hoisie/web"
 	"github.com/xyproto/instapage"
 	. "github.com/xyproto/onthefly"
@@ -14,8 +13,8 @@ import (
 
 type (
 	// Various functiomn signatures for handling requests
-	WebHandle                 (func(ctx *web.Context, val string) string)
-	SimpleContextHandle       (func(ctx *web.Context) string)
+	WebHandle              (func(ctx *web.Context, val string) string)
+	SimpleContextHandle    (func(ctx *web.Context) string)
 	TemplateValueGenerator func(*web.Context) TemplateValues
 )
 
@@ -23,14 +22,6 @@ type (
 func GenerateHTML(page *Page) func(*web.Context) string {
 	return func(ctx *web.Context) string {
 		return page.GetXML(true)
-	}
-}
-
-// Create a web.go compatible function that returns a string that is the HTML for this page
-func GenerateHTMLwithTemplate(page *Page, tvg TemplateValueGenerator) func(*web.Context) string {
-	return func(ctx *web.Context) string {
-		values := tvg(ctx)
-		return mustache.Render(page.GetXML(true), values)
 	}
 }
 
