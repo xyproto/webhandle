@@ -1,11 +1,12 @@
 webhandle
 =========
 
-Serve webpages with instapage, web.go and onthefly.
+Serve webpages with [instapage](https://github.com/xyproto/instapage), [web.go](https://github.com/hoisie/web) and [onthefly](https://github.com/xyproto/onthefly).
 
-Deprecated package! I'm planning to use negroni middleware instead.
+I'm planning to use [negroni](https://github.com/codegangsta/negroni) or [martini](https://github.com/go-martini/martini) instead of [web.go](https://github.com/hoisie/web).
 
-Example:
+Example
+-------
 
 ``` go
 package main
