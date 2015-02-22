@@ -1,3 +1,4 @@
+// Serve webpages with onthefly and web.go
 package webhandle
 
 import (
@@ -104,6 +105,7 @@ func CacheWrapper(id string, f SimpleContextHandle) SimpleContextHandle {
 	}
 }
 
+// Serve a static file, possibly with caching enabled
 func Publish(url, filename string, cache bool) {
 	if cache {
 		web.Get(url, CacheWrapper(url, File(filename)))

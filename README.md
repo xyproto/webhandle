@@ -1,7 +1,12 @@
-webhandle
-=========
+#webhandle [![Build Status](https://travis-ci.org/xyproto/webhandle.svg?branch=master)](https://travis-ci.org/xyproto/webhandle) [![GoDoc](https://godoc.org/github.com/xyproto/webhandle?status.svg)](http://godoc.org/github.com/xyproto/webhandle)
 
-One way to serve webpages with [instapage](https://github.com/xyproto/instapage), [web.go](https://github.com/hoisie/web) and [onthefly](https://github.com/xyproto/onthefly).
+One way to serve webpages with [onthefly](https://github.com/xyproto/onthefly) and [web.go](https://github.com/hoisie/web). Also uses [instapage](https://github.com/xyproto/instapage).
+
+Online API Documentation
+------------------------
+
+[godoc.org](http://godoc.org/github.com/xyproto/webhandle)
+
 
 Example
 -------
