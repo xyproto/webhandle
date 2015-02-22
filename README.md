@@ -3,7 +3,7 @@ webhandle
 
 Serve webpages with [instapage](https://github.com/xyproto/instapage), [web.go](https://github.com/hoisie/web) and [onthefly](https://github.com/xyproto/onthefly).
 
-I'm planning to use [negroni](https://github.com/codegangsta/negroni) or [martini](https://github.com/go-martini/martini) instead of [web.go](https://github.com/hoisie/web).
+I'm planning to support [negroni](https://github.com/codegangsta/negroni) or [martini](https://github.com/go-martini/martini) instead of [web.go](https://github.com/hoisie/web) in the future.
 
 Example
 -------
@@ -50,6 +50,6 @@ func main() {
 
 	web.Get("/(.*)", notFound)
 
-	web.Run(":9080")
+	web.Run(":3000")
 }
 ```

@@ -37,5 +37,5 @@ func main() {
 	web.Get("/svg", exampleSVG)
 	web.Get("/(.*)", notFound)
 
-	web.Run(":9080")
+	web.Run(":3000")
 }

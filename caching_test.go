@@ -1,9 +1,9 @@
 package webhandle
 
 import (
-	"testing"
 	"fmt"
 	"net/http"
+	"testing"
 )
 
 func TestFakeHandler(t *testing.T) {
@@ -41,7 +41,7 @@ func TestCaching(t *testing.T) {
 		t.Errorf("GenerateTextAndCount failed")
 	}
 
-	handler := NewCacheWrapper("abc123", func (w http.ResponseWriter, req *http.Request) {
+	handler := NewCacheWrapper("abc123", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintln(w, generateTextAndCount())
 	})
 	fake := NewFakeResponseWriter()
