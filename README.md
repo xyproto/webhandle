@@ -1,6 +1,6 @@
 #webhandle [![Build Status](https://travis-ci.org/xyproto/webhandle.svg?branch=master)](https://travis-ci.org/xyproto/webhandle) [![GoDoc](https://godoc.org/github.com/xyproto/webhandle?status.svg)](http://godoc.org/github.com/xyproto/webhandle)
 
-One way to serve webpages with [onthefly](https://github.com/xyproto/onthefly) and [web.go](https://github.com/hoisie/web). Also uses [instapage](https://github.com/xyproto/instapage).
+One way to serve webpages with [onthefly](https://github.com/xyproto/onthefly) and [web.go](https://github.com/hoisie/web).
 
 Online API Documentation
 ------------------------
@@ -19,7 +19,6 @@ import (
 
 	"github.com/hoisie/web"
 	"github.com/xyproto/onthefly"
-	"github.com/xyproto/instapage"
 	"github.com/xyproto/webhandle"
 )
 
@@ -36,7 +35,7 @@ func errorlog() string {
 }
 
 func hello(val string) string {
-	return instapage.Message("root page", "hello: "+val)
+	return webhandle.Message("root page", "hello: "+val)
 }
 
 func sampleSVG() string {

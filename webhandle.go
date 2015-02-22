@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/hoisie/web"
-	"github.com/xyproto/instapage"
 	. "github.com/xyproto/onthefly"
 )
 
@@ -47,16 +46,16 @@ func GenerateErrorHandle(errorfilename string) SimpleContextHandle {
 	return func(ctx *web.Context) string {
 		data, err := ioutil.ReadFile(errorfilename)
 		if err != nil {
-			return instapage.Message("Good", "No errors")
+			return Message("Good", "No errors")
 		}
 		errors := strings.Replace(string(data), "\n", "</br>", -1)
-		return instapage.Message("Errors", errors)
+		return Message("Errors", errors)
 	}
 }
 
 // Handles pages that are not found
 func NotFound(ctx *web.Context, val string) string {
-	ctx.NotFound(instapage.Message("No", "Page not found"))
+	ctx.NotFound(Message("No", "Page not found"))
 	return ""
 }
 

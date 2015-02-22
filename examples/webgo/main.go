@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 
 	"github.com/hoisie/web"
-	"github.com/xyproto/instapage"
 	"github.com/xyproto/onthefly"
 	"github.com/xyproto/webhandle"
 )
@@ -22,7 +21,7 @@ func errorlog() string {
 }
 
 func hello(val string) string {
-	return instapage.Message("root page", "hello: "+val)
+	return webhandle.Message("root page", "hello: "+val)
 }
 
 func sampleSVG() string {
