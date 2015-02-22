@@ -56,3 +56,11 @@ func main() {
 	web.Run(":3000")
 }
 ```
+
+General information
+-------------------
+
+* Version: 0.1
+* License: MIT
+* Alexander F Rødseth
+
