@@ -1,9 +1,7 @@
 webhandle
 =========
 
-Serve webpages with [instapage](https://github.com/xyproto/instapage), [web.go](https://github.com/hoisie/web) and [onthefly](https://github.com/xyproto/onthefly).
-
-I'm planning to support [negroni](https://github.com/codegangsta/negroni) or [martini](https://github.com/go-martini/martini) instead of [web.go](https://github.com/hoisie/web) in the future.
+One way to serve webpages with [instapage](https://github.com/xyproto/instapage), [web.go](https://github.com/hoisie/web) and [onthefly](https://github.com/xyproto/onthefly).
 
 Example
 -------
@@ -36,7 +34,7 @@ func hello(val string) string {
 	return instapage.Message("root page", "hello: "+val)
 }
 
-func exampleSVG() string {
+func sampleSVG() string {
 	return onthefly.SampleSVG2().String()
 }
 
@@ -46,7 +44,7 @@ func main() {
 	web.Get("/error", errorlog)
 	web.Get("/hello/(.*)", hello)
 
-	web.Get("/svg", exampleSVG)
+	web.Get("/svg", sampleSVG)
 
 	web.Get("/(.*)", notFound)
 

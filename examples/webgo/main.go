@@ -25,7 +25,7 @@ func hello(val string) string {
 	return instapage.Message("root page", "hello: "+val)
 }
 
-func exampleSVG() string {
+func sampleSVG() string {
 	return onthefly.SampleSVG2().String()
 }
 
@@ -34,7 +34,7 @@ func main() {
 
 	web.Get("/error", errorlog)
 	web.Get("/hello/(.*)", hello)
-	web.Get("/svg", exampleSVG)
+	web.Get("/svg", sampleSVG)
 	web.Get("/(.*)", notFound)
 
 	web.Run(":3000")
