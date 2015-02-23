@@ -52,9 +52,7 @@ func main() {
 
 	web.Get("/error", errorlog)
 	web.Get("/hello/(.*)", hello)
-
 	web.Get("/svg", sampleSVG)
-
 	web.Get("/(.*)", notFound)
 
 	web.Run(":3000")
