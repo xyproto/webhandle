@@ -10,7 +10,7 @@ Online API Documentation
 Features and limitations
 ------------------------
 
-* Webhandle can take a `*onthefly.Page` and publish both the HTML and CSS together, by listening to HTTP GET requests and by using [web.go](https://github.com/hoisie/web).
+* Webhandle can take a `*onthefly.Page` and publish both the HTML and CSS together, by listening to HTTP GET requests.
 * There are also a few helper functions.
 * Currently depends on [web.go](https://github.com/hoisie/web).
 
