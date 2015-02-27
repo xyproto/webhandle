@@ -7,11 +7,17 @@ Online API Documentation
 
 [godoc.org](http://godoc.org/github.com/xyproto/webhandle)
 
-Features
---------
+Features and limitations
+------------------------
 
 * Webhandle can take a `*onthefly.Page` and publish both the HTML and CSS together, by listening to HTTP GET requests and by using [web.go](https://github.com/hoisie/web).
 * There are also a few helper functions.
+* Currently depends on [web.go](https://github.com/hoisie/web).
+
+Plans
+-----
+
+* Rely on other web frameworks as well or just the standard http package.
 
 Example
 -------
